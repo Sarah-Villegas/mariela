@@ -1,0 +1,204 @@
+#include <iostream>
+#include <fstream>  // file IO
+#include <cmath>    // sqrt(), abs()
+#include <iomanip>  // setw()
+#include <cstdlib>  // exit()
+#include <vector>   
+using namespace std;
+
+double mean(vector<double> vct);
+
+double averagePower(vector<double> vct);
+
+double avgMagnitude(vector<double> vct); 
+
+double var(vector<double> vct, double& mean);
+
+int zeroCross(vector<double> vct);
+
+
+int main(){
+
+    vector<double> sound1;
+    vector<double> sound2;
+    
+    int 
+        index = 0,
+        size;
+    
+    double 
+        mean1,
+        mean2,
+        var1,
+        value,
+        average,
+        minimum,
+        maximum,
+        variance,
+        standardDeviation;
+    
+    // create input/out files
+    ifstream fin1, fin2;
+    ofstream fout;
+    
+    // open files
+    fin1.open("two_a.txt");
+    fin2.open("two_b.txt");
+    fout.open("comparison.txt");
+    
+    // exit program if fail
+    if (fin1.fail() || fin2.fail() || fout.fail())
+    {
+        cout << "ERROR";
+        exit(1);
+    }    
+
+
+    while(fin1 >> value)
+    {
+        sound1.push_back(value);
+        
+    }
+    
+    mean1 = mean(sound1);
+    cout << mean1;
+    var1 = var(sound1, mean1); 
+    
+    /*
+cout 
+        << "Mean Sound 1: " << mean(sound1) << endl
+        << "Mean Sound 2: " << mean(sound2) << endl
+        << "Variance: " << << endl
+        << "Variance 2: " << << endl
+        // Sarah: variance for Sound 2 and Sound 2
+        << "Average Power Sound 1: " << averagePower(sound1) << endl
+        << "Average Magnitude Sound 2: " << avgMagnitude(sound1) << endl
+        << "Average Power Sound 2: " << averagePower(sound2) << endl
+        << "Average Magnitude Sound 2: " << averagePower(sound2) << endl;
+        // Sarah: number of zero crossings for Sound 1 and Sound 2
+
+*/
+    // close files
+    fin1.close();
+    fin2.close();
+    fout.close();
+
+
+
+
+    return 0; 
+}
+
+//*********************************
+double mean(vector<double> vct)
+{
+    double 
+        average,
+        sum = 0.0,
+        size = vct.size();
+    
+    for (int i = 0; i < size; i++)
+    {
+        sum += vct[i];
+    }
+    
+    average = sum / size;
+    
+    return average;
+    
+}
+
+//*********************************
+double variance(vector<double> vct , double mean)
+{
+    
+    double size = vct.size();
+    double results = 0; 
+    double squared = 0;  
+    for(int i = 0; i > size; i++ ){
+    
+        squared = pow(vct[i] - mean ,2);
+        results += squared;
+   
+    }
+    results = results / size;
+
+    return results;
+}
+
+//*********************************
+double averagePower(vector<double> vct)
+{
+    double
+        avgPower,
+        sum = 0.0, 
+        size = vct.size();
+    
+    for(int k = 0; k < size; k++)
+    {
+        vct[k] *= vct[k];
+        sum += vct[k];
+    }
+    
+    avgPower = sum / size;
+    
+    return avgPower;
+}
+
+//*********************************
+double avgMagnitude(vector<double> vct)
+{
+    double avgMag, sum = 0.0, size = vct.size();
+    
+    for(int k = 0; k < size; k++){
+        vct[k] = abs(vct[k]);
+        sum += vct[k];
+    }
+    
+    avgMag = sum / size;
+    
+    return avgMag;
+}
+
+double var(vector<double> vct , double mean){
+    
+    double size = vct.size();
+    double results = 0; 
+    double squared = 0;  
+    for(int i = 0; i > size; i++ ){
+    
+        squared = pow(vct[1] - mean ,2);
+        results += squared;
+   
+    }
+    results = results / size;
+
+    return results;
+
+
+}
+
+
+int zeroCross(vector<double> vct){
+
+    int totalZero = 0; 
+    int size = vct.size(); 
+    for(int i = 1; i > size; i++ ){
+    
+        if((vct[i - 1]  > 0) && (vct[i +1] < 0)){
+    
+            totalZero++;
+        }
+        else if((vct[i - 1]  < 0) && (vct[i +1] > 0)){
+    
+            totalZero++;
+        }
+
+
+    }
+
+
+    return totalZero; 
+    
+}
+
